@@ -1,0 +1,45 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <title>Hello You (Basic Node App)</title>
+
+    <!-- Bootstrap -->
+    <link href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css" rel="stylesheet">
+    <link href="styles.css" rel="stylesheet">
+</head>
+
+<body>
+    <div class="container">
+        <h1>Hello You</h1>
+        <div class="row">
+            <div class="input-field col s12">
+                <input value="a name" id="nameBox" type="text" class="validate">
+                <label class="active" for="nameBox">Name</label>
+            </div>
+        </div>
+        <a id="btnName" class="waves-effect waves-light btn">Press Me</a>
+
+        <div class="row">
+            <h3>Result Here</h3>
+            <div class="row" id="results">
+                <div class="input-field col s6">
+                    <input value="" id="result">
+                    <label class="active" for="result">Result</label>
+                </div>
+            </div>
+        </div>
+    </div>
+    <!-- jQuery (necessary for Bootstrap's JavaScript plugins) -->
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/1.12.4/jquery.min.js"></script>
+    <!-- Include all compiled plugins (below), or include individual files as needed -->
+    <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/js/bootstrap.min.js"></script>
+
+    <script src="env.js"></script>
+
+</body>
+
+</html>
