@@ -1,5 +1,4 @@
-//allows path manipulation cross-platform
-//const path = require("path");
+
 const cors = require("cors");
 const MongoClient = require('mongodb').MongoClient;
 var express = require("express");
@@ -20,8 +19,6 @@ const app = express();
 
 app.use(cors());
 
-
-
 var port = process.env.PORT || 8081;
 
 app.use(express.static(__dirname + '/public'));
@@ -33,77 +30,7 @@ app.get("/displayHello", function (request, response) {
 });
 
 
-
-
-/*
-  app.get("/classifyURL", function (request, response) {
-
-    let imageURL = request.query.url;
-    let aClass;
-    console.log(vrURL)
-    reqObject = urlRemoteVR + "?url="+ imageURL;
-    req(reqObject, (err, result, body) => {
-      if (err) { return console.log(err); }
-      try {
-        let classFound = result.body[0].class;
-        aClass = classFound;
-        classSet = result.body;
-
-      }
-
-      catch (e) {
-        console.log(e);
-        console.log(result.body);
-        aClass = null;
-      }
-      let theMatch = {
-        classSet: classSet,
-        aClass: aClass
-      }
-      console.log(result)
-      // Add the object to the database
-      // send back to the original caller
-      response.json({ result: theMatch })
-    });
-  });
-
-  */
-/*
-  app.get("/classifyURL", function (request, response) {
-
-    let imageURL = request.query.url;
-    console.log(imageURL)
-    reqObject = urlRemoteVR+"?url"+imageURL;
-    req(reqObject,  (err, result, body) => {
-      if (err) { return console.log(err); }
-      console.log(result.body)
-      response.end(result.body)
-    });
-  })*/
-/*
-    imageResult = result;
-    $('#urlPic').attr("src", inputURL);
-    //alert(result.images[0].classifiers[0].classes[0].class); 
-    //alert(imageResult[0].class);
-    // alert('imageres class: '+imageResult[0].class);
-    try {
-      classFound = imageResult[0].class;
-    }
-
-    catch (e) {
-      console.log(e);
-      $('#textInfo').html("We couldn't find a valid image at that url");
-    }
-  }).then(result => $.get("/checkFishMatch", { body: result }, function (matchInfo) {
-    matchData = jQuery.parseJSON(matchInfo);
-
-
-   
-*/
-//****** 
-// console.log("this is objects Found in checkFishMatch " + objectsFound);
-
-
+//End point for analysing image at url provided (connects to cloud function which extracts data from third party VR service)
 app.get("/classifyURL", function (request, response) {
   let imageURL = request.query.url;
   console.log(imageURL)
@@ -111,11 +38,11 @@ app.get("/classifyURL", function (request, response) {
   req(reqObject, (err, result) => {
     if (err) { return console.log(err); }
     console.log(result.body);
-    //****** was parse here */
     response.send(result.body);
   });
 });
 
+//End point for checking image objects found against the database of fish species info and returning information
 app.get("/checkFishMatch", function (request, response) {
   console.log(request.query.body);
 
