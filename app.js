@@ -1,13 +1,14 @@
 require('dotenv/config'); //load the config file env, can be used by calling process.env.{variableName} 
+var express = require("express");
+const app = express();
 
 const cors = require("cors");
 const MongoClient = require('mongodb').MongoClient;
-var express = require("express");
 var bodyParser = require("body-parser");
 const req = require("request");
 const client = new MongoClient(process.env.DB_CONNECTION ,{ useUnifiedTopology: true, useNewUrlParser: true });
 const urlRemoteVR = process.env.VR_CONNECTION;
-const routes = require('./routes/fish');
+// const routes = require('./routes/fish');
 
 
 //variable used for MongoDB collection of fish and regulations
@@ -18,10 +19,11 @@ client.connect(err => {
   //    client.close();
 });
 
-const app = express();
 
 app.use(cors());
-app.use('/fish', routes);
+// app.use('/fish', routes);
+app.use(bodyParser.urlencoded());
+app.use(bodyParser.json());
 
 var port = process.env.PORT || 8081;
 
