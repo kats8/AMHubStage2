@@ -1,12 +1,15 @@
+require('dotenv/config'); //load the config file env, can be used by calling process.env.{variableName} 
 
 const cors = require("cors");
 const MongoClient = require('mongodb').MongoClient;
 var express = require("express");
 var bodyParser = require("body-parser");
 const req = require("request");
-const uri = "mongodb+srv://Angler_User:89CL735AU@sit725.63pic.mongodb.net/AM_Fish?retryWrites=true&w=majority";
-const client = new MongoClient(uri, { useUnifiedTopology: true, useNewUrlParser: true });
-const urlRemoteVR = 'https://us-south.functions.appdomain.cloud/api/v1/web/Katrina.Steen%40gmail.com_dev/default/AM%20Fish%20Analysis'
+const client = new MongoClient(process.env.DB_CONNECTION ,{ useUnifiedTopology: true, useNewUrlParser: true });
+const urlRemoteVR = process.env.VR_CONNECTION;
+const routes = require('./routes/fish');
+
+
 //variable used for MongoDB collection of fish and regulations
 let fishes;
 client.connect(err => {
@@ -18,6 +21,7 @@ client.connect(err => {
 const app = express();
 
 app.use(cors());
+app.use('/fish', routes);
 
 var port = process.env.PORT || 8081;
 
@@ -54,7 +58,7 @@ app.get("/checkFishMatch", function (request, response) {
     console.log(e)
     response.send(e);
   }
-
+  
 });
 
 
@@ -70,7 +74,7 @@ function checkForFish(idfdObjectArray, response) {
   //let aClass = objectArray[0].class;
 
   let recordsToMatch;
-
+  
   try {
     let objectArray = JSON.parse(idfdObjectArray);
    // let objectArray = idfdObjectArray;
