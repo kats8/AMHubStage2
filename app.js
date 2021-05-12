@@ -120,7 +120,7 @@ function checkForFish(idfdObjectArray, response) {
             if (fishMatch) {
               let recordData =
               {
-                fish: fishdata.fish,
+                fish: fishData.fish,
                 lat: -27.15,
                 long: 153.11,
                 url: ""
