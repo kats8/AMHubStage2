@@ -1,13 +1,14 @@
 require('dotenv/config'); //load the config file env, can be used by calling process.env.{variableName} 
 var express = require("express");
 const app = express();
-
 const cors = require("cors");
 const MongoClient = require('mongodb').MongoClient;
 var bodyParser = require("body-parser");
 const req = require("request");
-const client = new MongoClient(process.env.DB_CONNECTION ,{ useUnifiedTopology: true, useNewUrlParser: true });
+const axios = require('axios');
+const client = new MongoClient(process.env.DB_CONNECTION, { useUnifiedTopology: true, useNewUrlParser: true });
 const urlRemoteVR = process.env.VR_CONNECTION;
+const dbAuth = process.env.DBAPI_AUTH;
 // const routes = require('./routes/fish');
 
 
@@ -22,7 +23,7 @@ client.connect(err => {
 
 app.use(cors());
 // app.use('/fish', routes);
-app.use(bodyParser.urlencoded());
+app.use(bodyParser.urlencoded({ extended: true }));
 app.use(bodyParser.json());
 
 var port = process.env.PORT || 8081;
@@ -60,7 +61,7 @@ app.get("/checkFishMatch", function (request, response) {
     console.log(e)
     response.send(e);
   }
-  
+
 });
 
 
@@ -76,10 +77,10 @@ function checkForFish(idfdObjectArray, response) {
   //let aClass = objectArray[0].class;
 
   let recordsToMatch;
-  
+
   try {
     let objectArray = JSON.parse(idfdObjectArray);
-   // let objectArray = idfdObjectArray;
+    // let objectArray = idfdObjectArray;
     console.log(idfdObjectArray);
     console.log("Checking database");
     fishes = client.db("AM_Fish").collection("FishRegs");
@@ -103,7 +104,7 @@ function checkForFish(idfdObjectArray, response) {
                 info: fishes.info,
                 score: idfdObject.score,
                 fishMatch: fishMatch,
-               // aClass: aClass
+                // aClass: aClass
               }
               console.log("found a match");
               console.log(fishData);
@@ -115,6 +116,17 @@ function checkForFish(idfdObjectArray, response) {
           //once all records checked, send response
           if (recordsToMatch == 0) {
             console.log(fishData);
+            //Added to log a record in the monitoring table - using dummy lat/long till location data funcitonality provided
+            if (fishMatch) {
+              let recordData =
+              {
+                fish: fishdata.fish,
+                lat: -27.15,
+                long: 153.11,
+                url: ""
+              }
+              saveLocation(recordData)
+            }
             response.send(JSON.stringify(fishData));
           }
         })
@@ -130,6 +142,18 @@ function checkForFish(idfdObjectArray, response) {
     console.log(fishData);
 
   }
+}
+
+function saveLocation(json) {
+  let config = {
+    headers: {
+      authorization: dbAuth,
+    }
+  }
+  axios.post('https://amlocatapi.us-south.cf.appdomain.cloud/location/', json, config
+  ).then(res => {
+    console.log(res);
+  });
 }
 
 app.listen(port);
