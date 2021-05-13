@@ -119,13 +119,13 @@ function checkForFish(idfdObjectArray, response) {
             //Added to log a record in the monitoring table - using dummy lat/long till location data funcitonality provided
             if (fishMatch) {
               //dummy data but randomised to vary some
-              let latRand = -26 + (Math.random()*7)
-              let longRand = 153 + (Math.random()*5)
+              let latRand = -26 + (Math.random()*7);
+              let longRand = 150 + (Math.random()*2);
               let recordData =
               {
                 fish: fishData.fish,
-                lat: -27.15,
-                long: 153.11,
+                lat: latRand,
+                long: longRand,
                 url: ""
               }
               saveLocation(recordData)
