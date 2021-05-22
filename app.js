@@ -15,9 +15,15 @@ const dbAuth = process.env.DBAPI_AUTH;
 //variable used for MongoDB collection of fish and regulations
 let fishes;
 client.connect(err => {
-  fishes = client.db("AM_Fish").collection("FishRegs");
-  console.log("Connected to database");
-  //    client.close();
+  fishes =  client.db("AM_Fish").collection("FishRegs");
+  if(err){
+    console.log(err)
+  }
+  else{
+    console.log("Connected to database");
+    //    client.close();
+  }
+
 });
 
 
@@ -79,7 +85,8 @@ function checkForFish(idfdObjectArray, response) {
   let recordsToMatch;
 
   try {
-    let objectArray = JSON.parse(idfdObjectArray);
+    let objectArray = JSON.parse(idfdObjectArray[0]);
+    let locationobj = idfdObjectArray[1]; //save the location we got from the front end
     // let objectArray = idfdObjectArray;
     console.log(idfdObjectArray);
     console.log("Checking database");
@@ -119,13 +126,13 @@ function checkForFish(idfdObjectArray, response) {
             //Added to log a record in the monitoring table - using dummy lat/long till location data funcitonality provided
             if (fishMatch) {
               //dummy data but randomised to vary some
-              let latRand = -26 + (Math.random()*7);
-              let longRand = 150 + (Math.random()*2);
+              // let latRand = -26 + (Math.random()*7);
+              // let longRand = 150 + (Math.random()*2);
               let recordData =
               {
                 fish: fishData.fish,
-                lat: latRand,
-                long: longRand,
+                lat: locationobj.lat,
+                long: locationobj.long,
                 url: ""
               }
               saveLocation(recordData)
