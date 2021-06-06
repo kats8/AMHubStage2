@@ -92,8 +92,9 @@ function checkForFish(idfdObjectArray, response) {
   let recordsToMatch;
 
   try {
-    let objectArray = JSON.parse(idfdObjectArray[0]);
-    let locationobj = idfdObjectArray[1]; //save the location we got from the front end
+    let objectArray = JSON.parse(idfdObjectArray);
+    //  let objectArray = JSON.parse(idfdObjectArray[0]);
+    //let locationobj = idfdObjectArray[1]; //save the location we got from the front end
     // let objectArray = idfdObjectArray;
     console.log(idfdObjectArray);
     console.log("Checking database");
