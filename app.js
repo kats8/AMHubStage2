@@ -9,6 +9,7 @@ const axios = require('axios');
 const client = new MongoClient(process.env.DB_CONNECTION, { useUnifiedTopology: true, useNewUrlParser: true });
 const urlRemoteVR = process.env.VR_CONNECTION;
 const dbAuth = process.env.DBAPI_AUTH;
+
 // const routes = require('./routes/fish');
 
 
@@ -19,7 +20,10 @@ client.connect(err => {
   console.log("Connected to database");
   //    client.close();
 });
-
+//variables to store client location
+let pLat;
+let pLong;
+let imageURL = "";
 
 app.use(cors());
 // app.use('/fish', routes);
@@ -39,8 +43,11 @@ app.get("/displayHello", function (request, response) {
 
 //End point for analysing image at url provided (connects to cloud function which extracts data from third party VR service)
 app.get("/classifyURL", function (request, response) {
-  let imageURL = request.query.url;
+  imageURL = request.query.url;
+  pLat = request.query.lat;
+  pLong = request.query.long;
   console.log(imageURL)
+  console.log(pLat+" "+pLong)
   reqObject = urlRemoteVR + "?url=" + imageURL;
   req(reqObject, (err, result) => {
     if (err) { return console.log(err); }
@@ -124,9 +131,9 @@ function checkForFish(idfdObjectArray, response) {
               let recordData =
               {
                 fish: fishData.fish,
-                lat: latRand,
-                long: longRand,
-                url: ""
+                lat: pLat,
+                long: pLong,
+                url: imageURL
               }
               saveLocation(recordData)
             }
@@ -155,7 +162,8 @@ function saveLocation(json) {
   }
   axios.post('https://amlocatapi.us-south.cf.appdomain.cloud/location/', json, config
   ).then(res => {
-    console.log(res);
+//    console.log(res);
+    console.log(res.data);
   });
 }
 
