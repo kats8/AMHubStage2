@@ -7,14 +7,6 @@ let fishTable;
 
 module.exports = {
 
-  /*
-  connectToServer: function( callback ) {
-    MongoClient.connect( url,  { useNewUrlParser: true }, function( err, client ) {
-      _db  = client.db('test_db');
-      return callback( err );
-    } );
-  }, */
-
   connectToFishTable: function () {
     client.connect(err => {
       fishTable = client.db("AM_Fish").collection("FishRegs");

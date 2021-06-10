@@ -9,20 +9,6 @@ app.use(cors());
 app.use(bodyParser.urlencoded({ extended: true }));
 app.use(bodyParser.json());
 const mongoUtil = require("./mongoUtil");
-/*
-//MongoDB collection of fish and regulations
-let fishes;
-
-client.connect(err => {
-  fishes =  client.db("AM_Fish").collection("FishRegs");
-  if(err){
-    console.log(err)
-  }
-  else{
-    console.log("Connected to database");
-    //    client.close();
-  }
-});*/
 
 //route requires
 const classifierRoute = require('./routes/classifierRoute.js');
@@ -33,7 +19,6 @@ app.use('/classifyURL', classifierRoute);
 app.use('/checkFishMatch', fishMatchRoute);
 
 mongoUtil.connectToFishTable(function (err, client) {
-
   if (err) console.log(err);
 });
 var port = process.env.PORT || 8081;

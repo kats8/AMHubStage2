@@ -9,7 +9,6 @@ function checkForFish(idfdObjectArray, response) {
 //MongoDB collection of fish and regulations
 let fishes = mongoUtil.getFishTable();
 
-
     //tracks if a match was found
     let fishMatch = false;
     //tracks score of best match so far
@@ -17,7 +16,6 @@ let fishes = mongoUtil.getFishTable();
     let fishData = { fishMatch: fishMatch };
     //hold first class in set
     //let aClass = objectArray[0].class;
-
     let recordsToMatch;
 
     try {
